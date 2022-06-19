@@ -218,7 +218,7 @@ Create an environment variable called `GOOGLE_APPLICATION_CREDENTIALS` and assig
 1. Log out of your current terminal session and log back in, or run `source ~/.bashrc` to activate the environment variable.
 1. Refresh the token and verify the authentication with the GCP SDK:
     ```sh
-    gcloud auth application-default login
+    gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
     ```
 ## Clone the repo in the VM
 
