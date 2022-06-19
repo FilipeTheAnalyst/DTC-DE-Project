@@ -251,18 +251,19 @@ Make sure that the credentials are updated and the environment variable is set u
     terraform apply
     ```
 
-You should now have a bucket called `data_lake` and a dataset called `gh-archive-all` in BigQuery.
+You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset called `youtube_data` in BigQuery.
 
 ## Set up data ingestion with Airflow
 
-1. Go to the `dataeng-zoomcamp/7_project/airflow` folder.
+1. Go to the `airflow` folder.
 1. Run the following command and write down the output:
     ```sh
     echo -e "AIRFLOW_UID=$(id -u)"
     ```
 1. Open the `.env` file and change the value of `AIRFLOW_UID` for the value of the previous command.
-1. Change the value of `GCP_PROJECT_ID` for the name of your project id in Google Cloud and also change the value of `GCP_GCS_BUCKET` for the name of your bucket.
-1. Build the custom Airflow Docker image:
+2. Change also the value of `API_KEY` for your Youtube API Key generated above.
+3. Open the `docker-compose.yaml` file and change the values of `GCP_PROJECT_ID` and `GCP_GCS_BUCKET` on lines 65 and 66 for the correct values of your configuration
+4. Build the custom Airflow Docker image:
     ```sh
     docker-compose build
     ```
@@ -277,13 +278,33 @@ You should now have a bucket called `data_lake` and a dataset called `gh-archive
 
 You may now access the Airflow GUI by browsing to `localhost:8080`. Username and password are both `airflow` .
 >***IMPORTANT***: this is ***NOT*** a production-ready setup! The username and password for Airflow have not been modified in any way; you can find them by searching for `_AIRFLOW_WWW_USER_USERNAME` and `_AIRFLOW_WWW_USER_PASSWORD` inside the `docker-compose.yaml` file.
+- If you can't connect to Airflow you need to forward 8080 port to your local machine. You can this on VSCode following these steps:
+   - Open terminal
+   - Click on Ports
+   - Select the option Forward a port and select port 8080
+
+![myimage-alt-tag](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8d928906-e102-4e8f-8378-24bb2c3e6968/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220619%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220619T215750Z&X-Amz-Expires=86400&X-Amz-Signature=ba9282e9fc45f00694a2065d57c392540a4f92b7944281f14089d94eb808cd92&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 ## Perform the data ingestion
 
 If you performed all the steps of the previous section, you should now have a web browser with the Airflow dashboard.
 
-The DAG is set up to download all data starting from April 1st 2022. You may change this date by modifying line 202 of `dataeng-zoomcamp/7_project/airflow/dags/data_ingestion.py` . It is not recommended to retrieve data earlier than January 1st 2015, because the data was retrieved with a different API and it has not been tested to work with this pipeline. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
+The DAG is set up to download all data starting from 2022-06-06. You may change this date by modifying line 43 of `airflow/dags/data_ingestion_youtube.py`. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
 
-To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the starting date to the latest available hour and then perform hourly checks on every 30 minute mark.
+To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the youtube channels stated on `airflow/dags/ingest_youtube.py` code and their respective videos from each channel.
 
-After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every hour. If you shut down Airflow, you may also shut down the VM instance because it won't be needed for the following steps.
+The DAG consists on the followin tasks:
+- 1 BashOperator to execute the python code to collect the data from Youtube API
+- 2 PythonOperator tasks to upload the data into a GCS bucket (1 for channels data and the other for videos details)
+- 2 BigQueryOperator tasks to create external tables into BigQuery with the channels data and video details data
+
+![Airflow](https://user-images.githubusercontent.com/61323876/174502078-def3e6f5-2442-4e28-9c19-da40b9a5cf9e.JPG)
+
+After successfully running the Airflow workflow you should get the following parquet files created on GCP bucket for each day:
+![gcs_bucket](https://user-images.githubusercontent.com/61323876/174502511-15b74f11-0c11-43f7-8493-4ff6d4277312.JPG)
+
+And the tables channels and videos created inside youtube_data dataset:
+![gcp_bq](https://user-images.githubusercontent.com/61323876/174502580-73b706d7-7db1-4dd5-ae0f-a4fe72059313.JPG)
+
+
+After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
