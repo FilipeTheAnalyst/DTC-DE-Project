@@ -228,15 +228,13 @@ Log in to your VM instance and run the following from your `$HOME` folder:
 git clone https://github.com/FilipeTheAnalyst/airflow_youtube.git
 ```
 
-The contents of the project can be found in the `dataeng-zoomcamp/7_project` folder.
-
 >***IMPORTANT***: I strongly suggest that you fork my project and clone your copy so that you can easily perform changes on the code, because you will need to customize a few variables in order to make it run with your own infrastructure.
 
 ## Set up project infrastructure with Terraform
 
 Make sure that the credentials are updated and the environment variable is set up.
 
-1. Go to the `dataeng-zoomcamp/7_project/terraform` folder.
+1. Go to the `terraform` folder.
 
 1. Open `variables.tf` and edit line 11 under the `variable "region"` block so that it matches your preferred region.
 
