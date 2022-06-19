@@ -255,7 +255,7 @@ You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset c
 
 ## Set up data ingestion with Airflow
 
-1. Go to the `dataeng-zoomcamp/7_project/airflow` folder.
+1. Go to the `airflow` folder.
 1. Run the following command and write down the output:
     ```sh
     echo -e "AIRFLOW_UID=$(id -u)"
