@@ -278,6 +278,12 @@ You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset c
 
 You may now access the Airflow GUI by browsing to `localhost:8080`. Username and password are both `airflow` .
 >***IMPORTANT***: this is ***NOT*** a production-ready setup! The username and password for Airflow have not been modified in any way; you can find them by searching for `_AIRFLOW_WWW_USER_USERNAME` and `_AIRFLOW_WWW_USER_PASSWORD` inside the `docker-compose.yaml` file.
+- If you can't connect to Airflow you need to forward 8080 port to your local machine. You can this on VSCode following these steps:
+   - Open terminal
+   - Click on Ports
+   - Select the option Forward a port and select port 8080
+
+![myimage-alt-tag](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8d928906-e102-4e8f-8378-24bb2c3e6968/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220619%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220619T215750Z&X-Amz-Expires=86400&X-Amz-Signature=ba9282e9fc45f00694a2065d57c392540a4f92b7944281f14089d94eb808cd92&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 ## Perform the data ingestion
 
