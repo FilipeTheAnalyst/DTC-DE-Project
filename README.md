@@ -300,4 +300,11 @@ The DAG consists on the followin tasks:
 
 ![Airflow](https://user-images.githubusercontent.com/61323876/174502078-def3e6f5-2442-4e28-9c19-da40b9a5cf9e.JPG)
 
+After successfully running the Airflow workflow you should get the following parquet files created on GCP bucket for each day:
+![gcs_bucket](https://user-images.githubusercontent.com/61323876/174502511-15b74f11-0c11-43f7-8493-4ff6d4277312.JPG)
+
+And the tables channels and videos created inside youtube_data dataset:
+![gcp_bq](https://user-images.githubusercontent.com/61323876/174502580-73b706d7-7db1-4dd5-ae0f-a4fe72059313.JPG)
+
+
 After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
