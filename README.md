@@ -251,7 +251,7 @@ Make sure that the credentials are updated and the environment variable is set u
     terraform apply
     ```
 
-You should now have a bucket called `data_lake` and a dataset called `gh-archive-all` in BigQuery.
+You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset called `youtube_data` in BigQuery.
 
 ## Set up data ingestion with Airflow
 
