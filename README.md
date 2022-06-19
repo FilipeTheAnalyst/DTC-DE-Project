@@ -225,7 +225,7 @@ Create an environment variable called `GOOGLE_APPLICATION_CREDENTIALS` and assig
 Log in to your VM instance and run the following from your `$HOME` folder:
 
 ```sh
-git clone https://github.com/ziritrion/dataeng-zoomcamp.git
+git clone https://github.com/FilipeTheAnalyst/airflow_youtube.git
 ```
 
 The contents of the project can be found in the `dataeng-zoomcamp/7_project` folder.
