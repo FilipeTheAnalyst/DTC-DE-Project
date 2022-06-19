@@ -62,19 +62,14 @@ x-airflow-common:
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: 'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'
 
     # TODO: Please change GCP_PROJECT_ID & GCP_GCS_BUCKET, as per your config
-    GCP_PROJECT_ID: 'XXXX'
-    GCP_GCS_BUCKET: 'XXXX'
+    GCP_PROJECT_ID: 'taxi-rides-ny-348613'
+    GCP_GCS_BUCKET: 'dtc_data_lake_youtube_data'
 
     # The following variables are defined on .env file
-    PG_HOST: "${PG_HOST}"
-    PG_USER: "${PG_USER}"
-    PG_PASSWORD: "${PG_PASSWORD}"
-    PG_PORT: "${PG_PORT}"
-    PG_DATABASE: "${PG_DATABASE}"
     API_KEY: "${API_KEY}"
 
   volumes:
-    - ./dags_local:/opt/airflow/dags
+    - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ~/.google/credentials/:/.google/credentials:ro

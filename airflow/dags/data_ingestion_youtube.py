@@ -6,19 +6,13 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from google.cloud import storage
 from googleapiclient.discovery import build
-import pandas as pd
-import psycopg2 as ps
-import logging
-import pyarrow
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateExternalTableOperator
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 AIRFLOW_DAGS = os.environ.get("AIRFLOW_DAGS", "/opt/airflow/dags/")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 BUCKET = os.environ.get("GCP_GCS_BUCKET")
-BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all')
-#FILES = ['channels_' + datetime.now().strftime('%Y-%m-%d')+'.parquet',
-#        'videos_' + datetime.now().strftime('%Y-%m-%d')+'.parquet']
+BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'youtube_data')
 FILES = {'channels': 'channels_' + datetime.now().strftime('%Y-%m-%d')+'.parquet', 
         'videos': 'videos_' + datetime.now().strftime('%Y-%m-%d')+'.parquet'}
 
