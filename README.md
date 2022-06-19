@@ -289,7 +289,7 @@ You may now access the Airflow GUI by browsing to `localhost:8080`. Username and
 
 If you performed all the steps of the previous section, you should now have a web browser with the Airflow dashboard.
 
-The DAG is set up to download all data starting from April 1st 2022. You may change this date by modifying line 202 of `dataeng-zoomcamp/7_project/airflow/dags/data_ingestion.py` . It is not recommended to retrieve data earlier than January 1st 2015, because the data was retrieved with a different API and it has not been tested to work with this pipeline. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
+The DAG is set up to download all data starting from 2022-06-06. You may change this date by modifying line 43 of `airflow/dags/data_ingestion_youtube.py`. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
 
 To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the starting date to the latest available hour and then perform hourly checks on every 30 minute mark.
 
