@@ -32,21 +32,32 @@ The dataset pulled from the API is saved in a parquet format and uploaded to GCS
 
 The following requirements are needed to reproduce the project:
 
-1. A [Google Cloud Platform](https://cloud.google.com/) account.
-1. (Optional) The [Google Cloud SDK](https://cloud.google.com/sdk). Instructions for installing it are below.
+1. A [Youtube API Key](https://console.cloud.google.com/).
+2. A [Google Cloud Platform](https://cloud.google.com/) account.
+3. (Optional) The [Google Cloud SDK](https://cloud.google.com/sdk). Instructions for installing it are below.
     * Most instructions below will assume that you are using the SDK for simplicity.
     * If you use a VM instance on Google Cloud Platform the Google Cloud SDK comes installed by default, don't have to perform this step.
-1. (Optional) A SSH client.
+4. (Optional) A SSH client.
     * All the instructions listed below assume that you are using a Terminal and SSH.
     * I'm using Git Bash where you can donwload [here](https://gitforwindows.org/).
-1. (Optional) VSCode with the Remote-SSH extension.
+5. (Optional) VSCode with the Remote-SSH extension.
     * Any other IDE should work, but VSCode makes it very convenient to forward ports in remote VM's.
 
 Development and testing were carried out using a Google Cloud Compute VM instance. I strongly recommend that a VM instance is used for reproducing the project as well. All the instructions below will assume that a VM is used.
 
+
 ## Create a Google Cloud Project
 
 Access the [Google Cloud dashboard](https://console.cloud.google.com/) and create a new project from the dropdown menu on the top left of the screen, to the right of the _Google Cloud Platform_ text.
+
+## Generate a Youtube API Key
+1. Access the [Google Cloud console](https://console.cloud.google.com/) with your google account.
+2. Enable the [Youtube Data API v3](https://console.cloud.google.com/apis/library/youtube.googleapis.com)
+3. Go to **Credentials** on the left panel like shown below:
+![youtube_api](https://user-images.githubusercontent.com/61323876/174493955-d217049a-ad84-4e4b-bb5e-fe2a12c050e9.JPG)
+4. Click on **Create Credentials** button and select **API Key**
+![youtube_api2](https://user-images.githubusercontent.com/61323876/174494039-d8310b52-0e54-4aad-93f1-ceb1256badc7.JPG)
+5. Your API Key is created. You should save this information because we will need to copy this key to the project.
 
 ## Create a Service Account
 After you create the project, you will need to create a _Service Account_ with the following roles:
