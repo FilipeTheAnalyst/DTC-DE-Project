@@ -261,8 +261,9 @@ You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset c
     echo -e "AIRFLOW_UID=$(id -u)"
     ```
 1. Open the `.env` file and change the value of `AIRFLOW_UID` for the value of the previous command.
-1. Change the value of `GCP_PROJECT_ID` for the name of your project id in Google Cloud and also change the value of `GCP_GCS_BUCKET` for the name of your bucket.
-1. Build the custom Airflow Docker image:
+2. Change also the value of `API_KEY` for your Youtube API Key generated above.
+3. Open the `docker-compose.yaml` file and change the values of `GCP_PROJECT_ID` and `GCP_GCS_BUCKET` on lines 65 and 66 for the correct values of your configuration
+4. Build the custom Airflow Docker image:
     ```sh
     docker-compose build
     ```
