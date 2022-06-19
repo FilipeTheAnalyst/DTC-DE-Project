@@ -1,15 +1,15 @@
 locals {
   data_lake_bucket = "dtc_data_lake"
+  youtube_data = "youtube_data"
 }
 
 variable "project" {
   description = "Your GCP Project ID"
-  default = "taxi-rides-ny-348613"
 }
 
 variable "region" {
   description = "Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations"
-  default = "US"
+  default = "europe-west1"
   type = string
 }
 
@@ -21,5 +21,5 @@ variable "storage_class" {
 variable "BQ_DATASET" {
   description = "BigQuery Dataset that raw data (from GCS) will be written to"
   type = string
-  default = "trips_data_all"
+  default = "youtube_data"
 }
