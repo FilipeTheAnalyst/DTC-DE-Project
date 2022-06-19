@@ -291,6 +291,13 @@ If you performed all the steps of the previous section, you should now have a we
 
 The DAG is set up to download all data starting from 2022-06-06. You may change this date by modifying line 43 of `airflow/dags/data_ingestion_youtube.py`. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
 
-To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the starting date to the latest available hour and then perform hourly checks on every 30 minute mark.
+To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the youtube channels stated on `airflow/dags/ingest_youtube.py` code and their respective videos from each channel.
 
-After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every hour. If you shut down Airflow, you may also shut down the VM instance because it won't be needed for the following steps.
+The DAG consists on the followin tasks:
+- 1 BashOperator to execute the python code to collect the data from Youtube API
+- 2 PythonOperator tasks to upload the data into a GCS bucket (1 for channels data and the other for videos details)
+- 2 BigQueryOperator tasks to create external tables into BigQuery with the channels data and video details data
+
+![Airflow](https://user-images.githubusercontent.com/61323876/174502078-def3e6f5-2442-4e28-9c19-da40b9a5cf9e.JPG)
+
+After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
