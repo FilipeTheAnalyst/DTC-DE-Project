@@ -228,8 +228,6 @@ Log in to your VM instance and run the following from your `$HOME` folder:
 git clone https://github.com/FilipeTheAnalyst/airflow_youtube.git
 ```
 
-The contents of the project can be found in the `dataeng-zoomcamp/7_project` folder.
-
 >***IMPORTANT***: I strongly suggest that you fork my project and clone your copy so that you can easily perform changes on the code, because you will need to customize a few variables in order to make it run with your own infrastructure.
 
 ## Set up project infrastructure with Terraform
