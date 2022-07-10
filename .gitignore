@@ -71,3 +71,6 @@ terraform/.terraform.tfstate.lock.info
 terraform/terraform.tfstate
 terraform/.terraform/terraform.tfstate
 terraform/.terraform/providers/registry.terraform.io/hashicorp/google/4.27.0/linux_amd64/terraform-provider-google_v4.27.0_x5
+airflow/logs/boardgame_ingestion_dag/bigquery_external_table_task/2022-07-09T00:00:00+00:00/1.log
+airflow/logs/boardgame_ingestion_dag/format_to_parquet_task/2022-07-09T00:00:00+00:00/1.log
+airflow/logs/boardgame_ingestion_dag/local_to_gcs_task/2022-07-09T00:00:00+00:00/1.log
