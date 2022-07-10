@@ -1,6 +1,6 @@
 locals {
   data_lake_bucket = "dtc_data_lake"
-  youtube_data = "youtube_data"
+  boardgame_data = "boardgame_data"
 }
 
 variable "project" {
@@ -21,5 +21,5 @@ variable "storage_class" {
 variable "BQ_DATASET" {
   description = "BigQuery Dataset that raw data (from GCS) will be written to"
   type = string
-  default = "youtube_data"
+  default = "boardgame_data"
 }

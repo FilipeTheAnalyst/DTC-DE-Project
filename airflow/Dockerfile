@@ -9,10 +9,10 @@ RUN apt-get update -qq && apt-get install vim -qqq
 # git gcc g++ -qqq
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir pandas
-# Package for youtube API
-RUN pip install --no-cache-dir google-api-python-client
+# RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
+RUN pip install Scrapy
+# RUN pip install --no-cache-dir pandas
 
 # Ref: https://airflow.apache.org/docs/docker-stack/recipes.html
 
