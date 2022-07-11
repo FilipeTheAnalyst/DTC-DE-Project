@@ -1,4 +1,3 @@
-airflow/.env
 airflow/logs
 airflow/dags/data_ingestion_youtube.py
 airflow/dags/ingest_youtube.py
@@ -29,3 +28,4 @@ airflow/dags/boardgamescraper/boardgames_2022-07-11.parquet
 airflow/dags/boardgamescraper/boardgames_wishlist.csv
 airflow/dags/boardgamescraper/gamesprices_2022-07-11.csv
 airflow/dags/boardgamescraper/gamesprices_2022-07-11.parquet
+airflow/.env
