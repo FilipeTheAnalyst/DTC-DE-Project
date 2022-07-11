@@ -10,6 +10,8 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateExte
 import pyarrow.csv as pv
 import pyarrow.parquet as pq
 
+from pricetracker import check_target_price
+
 # AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 AIRFLOW_DAGS = os.environ.get("AIRFLOW_DAGS", "/opt/airflow/dags/boardgamescraper")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
@@ -21,6 +23,9 @@ INGEST_ITEMS = ['boardgames', 'gamesprices']
 INPUT_PART = "raw"
 INPUT_FILETYPE = 'csv'
 OUTPUT_FILETYPE = 'parquet'
+
+EMAIL_USER = os.getenv('EMAIL_USER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 def format_to_parquet(src_file):
     if not src_file.endswith('.csv'):
@@ -118,3 +123,18 @@ with local_workflow:
         )
 
         ingest_items_task >> format_to_parquet_task >> local_to_gcs_task >> bigquery_external_table_task >> bq_create_partitioned_table_job
+
+    check_price_task = PythonOperator(
+        task_id=f"check_price_task",
+        python_callable=check_target_price,
+        op_kwargs=dict(
+            email_user=EMAIL_USER,
+            email_password=EMAIL_PASSWORD,
+            prices_file=f"{AIRFLOW_DAGS}/{INGEST_ITEMS[1]}_{DATE_TEMPLATE}.{INPUT_FILETYPE}",
+            wishlist_file=f"{AIRFLOW_DAGS}/boardgames_wishlist.{INPUT_FILETYPE}",
+            execution_date=DATE_TEMPLATE
+        )
+    )
+
+    bq_create_partitioned_table_job >> check_price_task
+    

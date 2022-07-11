@@ -47,9 +47,9 @@ class GamesSpider(scrapy.Spider):
                 'date': current_date
             }
 
-        # next_page = response.css('a[title="next page"] ::attr(href)').get()
-        # if next_page is not None:
-        #     yield response.follow(next_page, callback=self.parse)
+        next_page = response.css('a[title="next page"] ::attr(href)').get()
+        if next_page is not None:
+            yield response.follow(next_page, callback=self.parse)
 
 class GamesPricesSpider(scrapy.Spider):
     name = 'gamesprices'
@@ -69,9 +69,9 @@ class GamesPricesSpider(scrapy.Spider):
             url = row.css(".p-t-xs.p-b-xs a::attr(href)").get()
             yield response.follow(url, callback=self.parse_games)
 
-        # next_page = response.css('a[rel="next"]').attrib["href"]
-        # if next_page is not None:
-        #     yield response.follow(next_page, callback=self.parse)
+        next_page = response.css('a[rel="next"]').attrib["href"]
+        if next_page is not None:
+            yield response.follow(next_page, callback=self.parse)
 
     def parse_games(self, response):
         url = response.request.url

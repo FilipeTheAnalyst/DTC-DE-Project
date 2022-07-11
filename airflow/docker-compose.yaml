@@ -65,6 +65,9 @@ x-airflow-common:
     GCP_PROJECT_ID: 'taxi-rides-ny-348613'
     GCP_GCS_BUCKET: 'dtc_data_lake_boardgame_data'
 
+    EMAIL_USER: "${EMAIL_USER}" 
+    EMAIL_PASSWORD: "${EMAIL_PASSWORD}" 
+
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs

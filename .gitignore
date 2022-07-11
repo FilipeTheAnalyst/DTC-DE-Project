@@ -1,6 +1,5 @@
 airflow/.env
 airflow/logs
-airflow/dags/ingest_boardgame.py
 airflow/dags/data_ingestion_youtube.py
 airflow/dags/ingest_youtube.py
 airflow/dags/__pycache__/data_ingestion_bgg.cpython-37.pyc
@@ -24,3 +23,9 @@ airflow/dags/boardgamescraper/boardgamescraper/__pycache__/__init__.cpython-39.p
 airflow/dags/boardgamescraper/boardgamescraper/__pycache__/settings.cpython-39.pyc
 airflow/dags/boardgamescraper/boardgamescraper/spiders/__pycache__/__init__.cpython-39.pyc
 airflow/dags/boardgamescraper/boardgamescraper/spiders/__pycache__/boardgamespider.cpython-39.pyc
+airflow/dags/__pycache__/pricetracker.cpython-37.pyc
+airflow/dags/boardgamescraper/boardgames_2022-07-11.csv
+airflow/dags/boardgamescraper/boardgames_2022-07-11.parquet
+airflow/dags/boardgamescraper/boardgames_wishlist.csv
+airflow/dags/boardgamescraper/gamesprices_2022-07-11.csv
+airflow/dags/boardgamescraper/gamesprices_2022-07-11.parquet
