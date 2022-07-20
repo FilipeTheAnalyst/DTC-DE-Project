@@ -312,9 +312,6 @@ The DAG is set up to download all data starting from 2022-07-18. You may change 
 To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the boargamegeek website and online stores and check if any of your boardgames inside your [wishlist](https://github.com/FilipeTheAnalyst/DTC-DE-Project/blob/master/airflow/dags/boardgamescraper/boardgames_wishlist.csv) reached your desired price. Feel free to change the records from the `boardgames_wishlist.csv` file to perform tests.
 
 The DAG consists on the following tasks:
-- 1 BashOperator to execute the python code to collect the data from Youtube API
-- 2 PythonOperator tasks to upload the data into a GCS bucket (1 for channels data and the other for videos details)
-- 2 BigQueryOperator tasks to create external tables into BigQuery with the channels data and video details data
 
 ![Airflow](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/031a9f47-29d9-4aa9-973d-2ace0fe2a3cb/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220720%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220720T233127Z&X-Amz-Expires=86400&X-Amz-Signature=242711f64c03e5e4a4689849db89eb2ca65cf027882a36f61b9f34494bc749a6&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
@@ -327,4 +324,6 @@ And the tables boardgames and gamesprices created inside capstone_boardgame_data
 
 After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
 
-
+## Data transformation with DBT
+I created a table in BigQuery using DBT to consolidate the data from boardgames and gamesprices tables.
+The [dbt models are presented here]
