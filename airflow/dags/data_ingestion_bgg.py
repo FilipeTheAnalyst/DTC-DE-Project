@@ -16,7 +16,7 @@ from pricetracker import check_target_price
 AIRFLOW_DAGS = os.environ.get("AIRFLOW_DAGS", "/opt/airflow/dags/boardgamescraper")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 BUCKET = os.environ.get("GCP_GCS_BUCKET")
-BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'boardgame_data')
+BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET")
 DATE_TEMPLATE = '{{ execution_date.strftime(\'%Y-%m-%d\') }}'
 INGEST_ITEMS = ['boardgames', 'gamesprices']
 # parquet_file = OUTPUT_GAMES_TEMPLATE.replace('.csv', '.parquet')
@@ -57,7 +57,7 @@ def upload_to_gcs(bucket, object_name, local_file):
 local_workflow = DAG(
     dag_id="boardgame_ingestion_dag",
     schedule_interval="@daily",
-    start_date = datetime(2022, 7, 9),
+    start_date = datetime(2022, 7, 18),
      max_active_runs=1,
     tags=['de-project']
 )
@@ -124,6 +124,11 @@ with local_workflow:
 
         ingest_items_task >> format_to_parquet_task >> local_to_gcs_task >> bigquery_external_table_task >> bq_create_partitioned_table_job
 
+    rm_boardgames_task = BashOperator(
+        task_id=f"rm_{INGEST_ITEMS[0]}_task",
+        bash_command=f'rm {AIRFLOW_DAGS}/{INGEST_ITEMS[0]}_{DATE_TEMPLATE}.{INPUT_FILETYPE} {AIRFLOW_DAGS}/{INGEST_ITEMS[0]}_{DATE_TEMPLATE}.{OUTPUT_FILETYPE}'
+    )
+
     check_price_task = PythonOperator(
         task_id=f"check_price_task",
         python_callable=check_target_price,
@@ -136,5 +141,10 @@ with local_workflow:
         )
     )
 
-    bq_create_partitioned_table_job >> check_price_task
+    rm_gamesprices_task = BashOperator(
+        task_id=f"rm_{INGEST_ITEMS[1]}_task",
+        bash_command=f'rm {AIRFLOW_DAGS}/{INGEST_ITEMS[1]}_{DATE_TEMPLATE}.{INPUT_FILETYPE} {AIRFLOW_DAGS}/{INGEST_ITEMS[1]}_{DATE_TEMPLATE}.{OUTPUT_FILETYPE}'
+    )
+
+    bq_create_partitioned_table_job >> check_price_task >> rm_gamesprices_task >> rm_boardgames_task
     

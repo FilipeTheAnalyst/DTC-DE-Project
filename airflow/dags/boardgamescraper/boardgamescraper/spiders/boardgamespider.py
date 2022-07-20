@@ -57,7 +57,7 @@ class GamesPricesSpider(scrapy.Spider):
         'https://www.ludonauta.es/tiendas/listar/page:1']
 
     def start_requests(self):
-        stores = ['espacio-de-juegos', 'mathom', 'jugamos-otra', 'jugarxjugar']
+        stores = ['espacio-de-juegos', 'mathom', 'jugamos-otra', 'jugarxjugar', 'doctor-panush', 'el-dado-negro', 'fdgames', 'somosjuegos']
         for store in stores:
             yield scrapy.Request(f'https://www.ludonauta.es/juegos-mesas-tiendas/listar-por-tienda/{store}',
                                  self.parse)
@@ -69,80 +69,235 @@ class GamesPricesSpider(scrapy.Spider):
             url = row.css(".p-t-xs.p-b-xs a::attr(href)").get()
             yield response.follow(url, callback=self.parse_games)
 
-        next_page = response.css('a[rel="next"]').attrib["href"]
+        try:
+            next_page = response.css('a[rel="next"]').attrib["href"]
+        except:
+            next_page = None
         if next_page is not None:
             yield response.follow(next_page, callback=self.parse)
 
     def parse_games(self, response):
         url = response.request.url
         store = re.search(r'(?<=https://).\w{4,}|(?<=https://www.).\w{4,}', url).group()
+        bgg_url_re = re.compile(r'\S+boardgamegeek\S+')
         current_date = date.today()
-        print("Store: ", store)
         if store == 'mathom':
             name = response.css('div[id="short_description_content"] ::text').get()
             price = float(response.css('span[id="our_price_display"] ::text').get().replace(' €', '').replace(',', '.'))
-            bgg_url = response.css('div.pa_content ::attr(href)').get()
+            bgg_url = None
+            try:
+                bgg_url_list = response.css('div.pa_content ::attr(href)').getall()
+            except:
+                bgg_url_list = []
+            for item in bgg_url_list:
+                if re.search(bgg_url_re, item):
+                    bgg_url = re.search(bgg_url_re, item).group()
             id_compile = re.compile(r'\d+')
             id = int(re.search(id_compile, bgg_url).group())
             availability = 'En stock'
-            yield {
-                'id': id,
-                'store': store,
-                'name': name,
-                'price': price,
-                'bgg_url': bgg_url,
-                'url': url,
-                'availability': availability,
-                'date': current_date
-            }
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
         if store == 'espaciodejuegos':
             name = response.css('h1.product_title.entry-title.elementor-heading-title.elementor-size-large ::text').get()
             price = float(response.css('span.woocommerce-Price-amount.amount ::text')[2].get().replace(',','.'))
             availability = response.css('span.stock.in-stock ::text').get()
-            bgg_url = response.css('div.woocommerce-Tabs-panel.woocommerce-Tabs-panel--description.panel.entry-content.wc-tab ::attr(href)').get()
+            try:
+                bgg_url = response.css('div.woocommerce-Tabs-panel.woocommerce-Tabs-panel--description.panel.entry-content.wc-tab ::attr(href)')[-1].get()
+            except:
+                bgg_url = None
             id_compile = re.compile(r'\d+')
-            id = int(re.search(id_compile, bgg_url).group())
-            yield {
-                'id': id,
-                'store': store,
-                'name': name,
-                'price': price,
-                'bgg_url': bgg_url,
-                'url': url,
-                'availability': availability,
-                'date': current_date
-            }
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
         if store == 'jugarxjugar':
             name = response.css('h1.page-title ::text').get().replace('\n','').replace('\t','')
             price = float(response.css('div.current-price ::text')[1].get().replace('\xa0€', '').replace(',','.'))
             availability = response.css('span[id="product-availability"] ::text').get().replace('\n', '').replace('\t','').strip()
-            bgg_url = response.css('div.product-description ::attr(href)').get()
+            bgg_url_list = response.css('div.product-description ::attr(href)').getall()
+            bgg_url = None
+            # This website have 2 boardgamegeek urls (1st for boardgame info; 2nd for boardgame images)
+            aux = 0
+            for item in bgg_url_list:
+                if (re.search(bgg_url_re, item)) and (aux == 0):
+                    bgg_url = re.search(bgg_url_re, item).group()
+                    aux = 1
             id_compile = re.compile(r'\d+')
-            id = int(re.search(id_compile, bgg_url).group())
-            yield {
-                'id': id,
-                'store': store,
-                'name': name,
-                'price': price,
-                'bgg_url': bgg_url,
-                'url': url,
-                'availability': availability,
-                'date': current_date
-            }
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
         if store == 'jugamosotra':
             name = response.css('h1.h1 ::text').get()
             price = float(response.css('div.current-price ::text')[1].get().replace('\xa0€', '').replace(',','.'))
             availability = response.css('span[id="product-availability"] ::text')[-1].get().replace('\n','').split('.')[0].strip()
-            bgg_url = response.css('div.tab-content ::attr(href)').get()
+            try:
+                bgg_url_old = response.css('div.tab-content ::attr(href)')[-1].get()
+                bgg_url = re.search(bgg_url_re, bgg_url_old).group()
+            except:
+                bgg_url = None
             id_compile = re.compile(r'\d+')
-            id = int(re.search(id_compile, bgg_url).group())
-            yield {
-                'id': id,
-                'store': store,
-                'name': name,
-                'price': price,
-                'bgg_url': bgg_url,
-                'url': url,
-                'availability': availability,
-                'date': current_date
-            }
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+        
+        if store == 'doctorpanush':
+            name = response.css('h1.page-title ::text').get()
+            price = float(response.css('span.product-price ::text').get().replace('€',''))
+            availability = 'En stock'
+            bgg_url_old = response.css('a[rel="noopener noreferrer"] ::attr(href)').get()
+            try:
+                bgg_url = re.search(bgg_url_re, bgg_url_old).group()
+            except:
+                bgg_url = None
+
+            id_compile = re.compile(r'\d+')
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
+        if store == 'eldadonegro':
+            name = response.css('h1.h1.page-title ::text').get()
+            price = float(response.css('span.product-price ::text').get().replace('\xa0€', '').replace(',','.'))
+            availability = 'En stock'
+            try:
+                bgg_url = response.css('a[title="Ir a la ficha de la BGG"] ::attr(href)').get()
+            except:
+                bgg_url = None
+
+            id_compile = re.compile(r'\d+')
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
+        if store == 'fdgames':
+            name = response.css('h1.h1 ::text').get()
+            price = float(response.css('span.current-price-value ::text').get().replace('\n', '').replace('\xa0€','').replace(',','.').strip())
+            availability = 'En stock'
+            bgg_url = None
+            try:
+                bgg_url_list = response.css('div.product-description ::attr(href)').getall()
+            except:
+                bgg_url = None
+
+            for item in bgg_url_list:
+                if re.search(bgg_url_re, item):
+                    bgg_url = re.search(bgg_url_re, item).group()
+
+            id_compile = re.compile(r'\d+')
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }
+
+        if store == 'somosjuegos':
+            name = response.css('h1.product_title.entry-title ::text').get()
+            price = float(response.css('span.woocommerce-Price-amount.amount ::text')[2].get().replace(',','.'))
+            availability = 'En stock'
+            bgg_url = None
+            try:
+                bgg_url_list = response.css('a[rel="noopener"] ::attr(href)').getall()
+            except:
+                bgg_url = None
+
+            for item in bgg_url_list:
+                if re.search(bgg_url_re, item):
+                    bgg_url = re.search(bgg_url_re, item).group()
+
+            id_compile = re.compile(r'\d+')
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
+            if bgg_url is not None:
+                yield {
+                    'id': id,
+                    'store': store,
+                    'name': name,
+                    'price': price,
+                    'bgg_url': bgg_url,
+                    'url': url,
+                    'availability': availability,
+                    'date': current_date
+                }

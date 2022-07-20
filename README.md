@@ -1,21 +1,50 @@
-# Youtube API Data Engineering Project
+# Boardgames Analysis
+## Data Engineer Zoomcamp Capstone Project
 
-# Problem
+This capstone project was developed under the scope of the [Data Engineer Zoomcamp by DataTalksClub](https://github.com/DataTalksClub/data-engineering-zoomcamp) (the biggest Data community in the internet - [DTC](https://datatalks.club/)).
 
-This is a simple project which takes data from Youtube API for 10 data analysts channels transforms and load the data into a datawarehouse.
+The above zoomcamp had the following main topics/tools:
+- Docker and docker-compose;
+- Google Cloud Platform;
+- Terraform;
+- Airflow;
+- Data Warehouse with Big Query;
+- Analytics Engineering with Data Build Tool (DBT);
+- Batch with Spark;
+- Streaming with Kafka.
 
-# Dataset
+The zoomcamp is completed with a personal [Project](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/week_7_project) envolving some of those tools/topics.
 
-The chosen dataset for this project is the Youtube API. The API contains data about youtube channels, video details like number of views, likes, published data, title, etc.
+For my project I decided to analyse the boardgames published till today (around 130k) and their respective prices from 7 online stores with price alert notification via e-mail.
+More specifically, I decided to analyse the average temperature from 2000 to 2020. (It was decided to avoid 2021 due possible mistakes and 2022 since it is incomplete).
 
-# Technologies
-* *Google Cloud Platform (GCP)*: Cloud-based auto-scaling platform by Google
-  * *Google Cloud Storage (GCS)*: Data Lake
-  * *BigQuery*: Data Warehouse
-* *Terraform*: Infrastructure-as-Code (IaC)
-* *Docker*: Containerization
-* *SQL*: Data Analysis & Exploration
-* *Airflow*: Pipeline Orchestration
+**With this project I intend to analyse the boardgame universe, checking the trend of boardgames published with their respetive price ranges and giving the possibility to define a wishlist of boardgames with the target price.**
+
+![Ticket to Ride](https://cf.geekdo-images.com/URHAgY3hKDF6W2-mVlnb9Q__imagepagezoom/img/XjBePAG4q1WbM_BqXCT1dqpRXmA=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic1006275.jpg)
+
+## Dataset
+
+In terms of dataset I used the main database available online that is recognized by the boardgaming community worldwide known as [BoardGameGeek](https://boardgamegeek.com/) and performed web scraping techniques to extract the desired data.
+
+To extract the data from online stores, I used a price comparison website for boardgames called [Ludonauta](https://www.ludonauta.es/) to get the information from the following stores:
+- [Espacio de Juegos](https://www.espaciodejuegos.es/)
+- [Jugamos Otra?](https://jugamosotra.com/es/)
+- [jugarXjugar](https://www.jugarxjugar.com/shop/)
+- [Doctor Panush](https://doctorpanush.com/)
+- [El Dado Negro](https://eldadonegro.com/)
+- [Fdgames](https://fdgames.eu/es/)
+- [SomosJuegos](https://www.somosjuegos.com/)
+
+## Used Technologies 🔨
+
+For this project I decided to use the following tools:
+- Docker - to proceed to the containerization of other technologies;
+- Airflow - for the orchestration of the full pipeline;
+- Terraform - As a Infrastructure-as-Code (IaC) tool;
+- Google Cloud Storage (GCS) - for storage as Data Lake;
+- BigQuery- for the project Data Warehouse;
+- Data Build Tool (DBT) - for the transformation of raw data in refined data;
+- Google Data studio - for visualizations.
 
 # Project details and implementation
 

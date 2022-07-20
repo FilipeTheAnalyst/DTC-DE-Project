@@ -28,3 +28,7 @@ airflow/dags/boardgamescraper/boardgames_2022-07-11.parquet
 airflow/dags/boardgamescraper/gamesprices_2022-07-11.csv
 airflow/dags/boardgamescraper/gamesprices_2022-07-11.parquet
 airflow/.env
+airflow/docker-compose.yaml
+airflow/dags/boardgamescraper/boardgames_2022-07-20.csv
+airflow/dags/boardgamescraper/boardgames_2022-07-20.parquet
+airflow/dags/boardgamescraper/gamesprices_2022-07-20.csv
