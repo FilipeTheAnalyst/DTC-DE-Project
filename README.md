@@ -15,7 +15,7 @@ The above zoomcamp had the following main topics/tools:
 
 The zoomcamp is completed with a personal [Project](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/week_7_project) envolving some of those tools/topics.
 
-For my project I decided to analyse the boardgames published till today (around 130k) and their respective prices from 7 online stores with price alert notification via e-mail.
+For my project I decided to analyse the boardgames published till today (around 130k) and their respective prices from 8 online stores with price alert notification via e-mail.
 More specifically, I decided to analyse the average temperature from 2000 to 2020. (It was decided to avoid 2021 due possible mistakes and 2022 since it is incomplete).
 
 **With this project I intend to analyse the boardgame universe, checking the trend of boardgames published with their respetive price ranges and giving the possibility to define a wishlist of boardgames with the target price.**
@@ -34,6 +34,7 @@ To extract the data from online stores, I used a price comparison website for bo
 - [El Dado Negro](https://eldadonegro.com/)
 - [Fdgames](https://fdgames.eu/es/)
 - [SomosJuegos](https://www.somosjuegos.com/)
+- [Mathom](https://mathom.es/es/)
 
 ## Used Technologies 🔨
 
@@ -46,31 +47,22 @@ For this project I decided to use the following tools:
 - Data Build Tool (DBT) - for the transformation of raw data in refined data;
 - Google Data studio - for visualizations.
 
-# Project details and implementation
-
-This project makes use of Google Cloud Platform, particularly Google Cloud Storage (GCS) and BigQuery (BQ).
-
-Cloud infrastructure is mostly managed with Terraform, except for Airflow.
-
-Data ingestion is carried out by an Airflow DAG. The DAG downloads new data daily and ingests it to a Cloud Storage bucket which behaves as the Data Lake for the project. 
-The dataset pulled from the API is saved in a parquet format and uploaded to GCS then creating an external table in BigQuery for querying the details inside the parquet files.
-
 # Reproduce the project
 
 ## Prerequisites
 
 The following requirements are needed to reproduce the project:
 
-1. A [Youtube API Key](https://console.cloud.google.com/).
-2. A [Google Cloud Platform](https://cloud.google.com/) account.
-3. (Optional) The [Google Cloud SDK](https://cloud.google.com/sdk). Instructions for installing it are below.
+1. A [Google Cloud Platform](https://cloud.google.com/) account.
+2. (Optional) The [Google Cloud SDK](https://cloud.google.com/sdk). Instructions for installing it are below.
     * Most instructions below will assume that you are using the SDK for simplicity.
     * If you use a VM instance on Google Cloud Platform the Google Cloud SDK comes installed by default, don't have to perform this step.
-4. (Optional) A SSH client.
+3. (Optional) A SSH client.
     * All the instructions listed below assume that you are using a Terminal and SSH.
     * I'm using Git Bash where you can donwload [here](https://gitforwindows.org/).
-5. (Optional) VSCode with the Remote-SSH extension.
+4. (Optional) VSCode with the Remote-SSH extension.
     * Any other IDE should work, but VSCode makes it very convenient to forward ports in remote VM's.
+5. A [DBT cloud account](https://www.getdbt.com/signup/) and connect to your BigQuery [following these instructions](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/dbt_cloud_setup.md).
 
 Development and testing were carried out using a Google Cloud Compute VM instance. I strongly recommend that a VM instance is used for reproducing the project as well. All the instructions below will assume that a VM is used.
 
@@ -78,15 +70,6 @@ Development and testing were carried out using a Google Cloud Compute VM instanc
 ## Create a Google Cloud Project
 
 Access the [Google Cloud dashboard](https://console.cloud.google.com/) and create a new project from the dropdown menu on the top left of the screen, to the right of the _Google Cloud Platform_ text.
-
-## Generate a Youtube API Key
-1. Access the [Google Cloud console](https://console.cloud.google.com/) with your google account.
-2. Enable the [Youtube Data API v3](https://console.cloud.google.com/apis/library/youtube.googleapis.com)
-3. Go to **Credentials** on the left panel like shown below:
-![youtube_api](https://user-images.githubusercontent.com/61323876/174493955-d217049a-ad84-4e4b-bb5e-fe2a12c050e9.JPG)
-4. Click on **Create Credentials** button and select **API Key**
-![youtube_api2](https://user-images.githubusercontent.com/61323876/174494039-d8310b52-0e54-4aad-93f1-ceb1256badc7.JPG)
-5. Your API Key is created. You should save this information because we will need to copy this key to the project.
 
 ## Create a Service Account
 After you create the project, you will need to create a _Service Account_ with the following roles:
@@ -254,7 +237,7 @@ Create an environment variable called `GOOGLE_APPLICATION_CREDENTIALS` and assig
 Log in to your VM instance and run the following from your `$HOME` folder:
 
 ```sh
-git clone https://github.com/FilipeTheAnalyst/airflow_youtube.git
+git clone https://github.com/FilipeTheAnalyst/DTC-DE-Project.git
 ```
 
 >***IMPORTANT***: I strongly suggest that you fork my project and clone your copy so that you can easily perform changes on the code, because you will need to customize a few variables in order to make it run with your own infrastructure.
@@ -265,7 +248,7 @@ Make sure that the credentials are updated and the environment variable is set u
 
 1. Go to the `terraform` folder.
 
-1. Open `variables.tf` and edit line 11 under the `variable "region"` block so that it matches your preferred region.
+1. Open `variables.tf` and edit line 12 under the `variable "region"` block so that it matches your preferred region.
 
 1. Initialize Terraform:
     ```sh
@@ -289,10 +272,16 @@ You should now have a bucket called `dtc_data_lake_youtube_data` and a dataset c
     ```sh
     echo -e "AIRFLOW_UID=$(id -u)"
     ```
-1. Open the `.env` file and change the value of `AIRFLOW_UID` for the value of the previous command.
-2. Change also the value of `API_KEY` for your Youtube API Key generated above.
-3. Open the `docker-compose.yaml` file and change the values of `GCP_PROJECT_ID` and `GCP_GCS_BUCKET` on lines 65 and 66 for the correct values of your configuration
-4. Build the custom Airflow Docker image:
+1. Edit the `.env` file with the following data:
+```sh
+AIRFLOW_UID=1001
+EMAIL_USER=your_email_account
+EMAIL_PASSWORD=generated_app_password
+```
+   Change the value of `AIRFLOW_UID` for the value of the previous command.
+   You should change the `EMAIL_USER` to your e-mail user account and for `EMAIL_PASSWORD` you have to create an app-specific password on Gmail. Here is a [tutorial](https://www.lifewire.com/get-a-password-to-access-gmail-by-pop-imap-2-1171882) to support on this step.
+1. Open the `docker-compose.yaml` file and change the values of `GCP_PROJECT_ID`, `GCP_GCS_BUCKET` and `BIGQUERY_DATASET` on lines 65-67 for the correct values of your configuration
+1. Build the custom Airflow Docker image:
     ```sh
     docker-compose build
     ```
@@ -318,22 +307,24 @@ You may now access the Airflow GUI by browsing to `localhost:8080`. Username and
 
 If you performed all the steps of the previous section, you should now have a web browser with the Airflow dashboard.
 
-The DAG is set up to download all data starting from 2022-06-06. You may change this date by modifying line 43 of `airflow/dags/data_ingestion_youtube.py`. Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
+The DAG is set up to download all data starting from 2022-07-18. You may change this date by modifying line 58 of [`airflow/dags/data_ingestion_bgg.py`](https://github.com/FilipeTheAnalyst/DTC-DE-Project/blob/master/airflow/dags/data_ingestion_bgg.py). Should you change the DAG date, you will have to delete the DAG in the Airflow UI and wait a couple of minutes so that Airflow can pick up the changes in the DAG.
 
-To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the youtube channels stated on `airflow/dags/ingest_youtube.py` code and their respective videos from each channel.
+To trigger the DAG, simply click on the switch icon next to the DAG name. The DAG will retrieve all data from the boargamegeek website and online stores and check if any of your boardgames inside your [wishlist](https://github.com/FilipeTheAnalyst/DTC-DE-Project/blob/master/airflow/dags/boardgamescraper/boardgames_wishlist.csv) reached your desired price. Feel free to change the records from the `boardgames_wishlist.csv` file to perform tests.
 
-The DAG consists on the followin tasks:
+The DAG consists on the following tasks:
 - 1 BashOperator to execute the python code to collect the data from Youtube API
 - 2 PythonOperator tasks to upload the data into a GCS bucket (1 for channels data and the other for videos details)
 - 2 BigQueryOperator tasks to create external tables into BigQuery with the channels data and video details data
 
-![Airflow](https://user-images.githubusercontent.com/61323876/174502078-def3e6f5-2442-4e28-9c19-da40b9a5cf9e.JPG)
+![Airflow](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/031a9f47-29d9-4aa9-973d-2ace0fe2a3cb/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220720%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220720T233127Z&X-Amz-Expires=86400&X-Amz-Signature=242711f64c03e5e4a4689849db89eb2ca65cf027882a36f61b9f34494bc749a6&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
-After successfully running the Airflow workflow you should get the following parquet files created on GCP bucket for each day:
-![gcs_bucket](https://user-images.githubusercontent.com/61323876/174502511-15b74f11-0c11-43f7-8493-4ff6d4277312.JPG)
+After successfully running the Airflow workflow you should get the following folders and respective parquet files created on GCP bucket for each day:
+![gcs_bucket](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c6c664cb-3176-4eeb-837a-137679a25eee/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220720%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220720T233537Z&X-Amz-Expires=86400&X-Amz-Signature=b5a25a7a3a6461f23532f2c07ffa1cd60780976135ece027bd58f07f91c3be46&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
-And the tables channels and videos created inside youtube_data dataset:
-![gcp_bq](https://user-images.githubusercontent.com/61323876/174502580-73b706d7-7db1-4dd5-ae0f-a4fe72059313.JPG)
+And the tables boardgames and gamesprices created inside capstone_boardgame_data dataset:
+![gcp_bq](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2959536f-0180-4a03-878e-686ac271acc3/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220720%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220720T233810Z&X-Amz-Expires=86400&X-Amz-Signature=0637019635dfec5c756d184404c6c42b453f4d88672d65e91b7d6898fd21d88c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 
 After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
+
+
