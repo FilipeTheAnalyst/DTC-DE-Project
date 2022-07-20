@@ -1,7 +1,7 @@
 # Boardgames Analysis
 ## Data Engineer Zoomcamp Capstone Project
 
-This capstone project was developed under the scope of the [Data Engineer Zoomcamp by DataTalksClub](https://github.com/DataTalksClub/data-engineering-zoomcamp) (the biggest Data community in the internet - [DTC](https://datatalks.club/)).
+This capstone project was developed under the scope of the [Data Engineer Zoomcamp by DataTalksClub](https://github.com/DataTalksClub/data-engineering-zoomcamp) (the biggest Data community in the internet - [DTC](https://datatalks.club/).
 
 The above zoomcamp had the following main topics/tools:
 - Docker and docker-compose;
