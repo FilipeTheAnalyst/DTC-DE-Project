@@ -327,3 +327,6 @@ After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the 
 ## Data transformation with DBT
 I created a table in BigQuery using DBT to consolidate the data from boardgames and gamesprices tables.
 The [dbt models are presented here](https://github.com/FilipeTheAnalyst/DTC-DE-Project/tree/master/dbt_project/models).
+
+## Data visualization with Google Data Studio
+The dashboards are available [in this link](https://datastudio.google.com/reporting/3f21fa08-66b2-4b85-bcf6-69711ecc73b9)
