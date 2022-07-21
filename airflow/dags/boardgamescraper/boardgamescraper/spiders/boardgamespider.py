@@ -93,7 +93,10 @@ class GamesPricesSpider(scrapy.Spider):
                 if re.search(bgg_url_re, item):
                     bgg_url = re.search(bgg_url_re, item).group()
             id_compile = re.compile(r'\d+')
-            id = int(re.search(id_compile, bgg_url).group())
+            try:
+                id = int(re.search(id_compile, bgg_url).group())
+            except:
+                id = None
             availability = 'En stock'
             if bgg_url is not None:
                 yield {

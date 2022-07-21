@@ -12,14 +12,12 @@ import pyarrow.parquet as pq
 
 from pricetracker import check_target_price
 
-# AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 AIRFLOW_DAGS = os.environ.get("AIRFLOW_DAGS", "/opt/airflow/dags/boardgamescraper")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 BUCKET = os.environ.get("GCP_GCS_BUCKET")
 BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET")
 DATE_TEMPLATE = '{{ execution_date.strftime(\'%Y-%m-%d\') }}'
 INGEST_ITEMS = ['boardgames', 'gamesprices']
-# parquet_file = OUTPUT_GAMES_TEMPLATE.replace('.csv', '.parquet')
 INPUT_PART = "raw"
 INPUT_FILETYPE = 'csv'
 OUTPUT_FILETYPE = 'parquet'
