@@ -16,7 +16,6 @@ The above zoomcamp had the following main topics/tools:
 The zoomcamp is completed with a personal [Project](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/week_7_project) envolving some of those tools/topics.
 
 For my project I decided to analyse the boardgames published till today (around 130k) and their respective prices from 8 online stores with price alert notification via e-mail.
-More specifically, I decided to analyse the average temperature from 2000 to 2020. (It was decided to avoid 2021 due possible mistakes and 2022 since it is incomplete).
 
 **With this project I intend to analyse the boardgame universe, checking the trend of boardgames published with their respetive price ranges and giving the possibility to define a wishlist of boardgames with the target price.**
 
@@ -293,6 +292,23 @@ EMAIL_PASSWORD=generated_app_password
     ```sh
     docker-compose up
     ```
+1. Although I have inserted on [Dockerfile](https://github.com/FilipeTheAnalyst/DTC-DE-Project/blob/master/airflow/Dockerfile) the python packages needed to run the code inside docker container, I wasn't able to make it work with the Scrapy framework that I used to web scrape data. To achieve that I had to install Scrapy directly on airflow worker performing the following steps:
+- Execute `docker ps` on bash to get the containers ids and search for airflow-worker
+```sh
+    CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS                    PORTS                                                 NAMES
+fbb212ef7755   airflow_airflow-worker      "/usr/bin/dumb-init …"   30 minutes ago   Up 30 minutes (healthy)   8080/tcp                                              airflow-airflow-worker-1
+e0ad055214fe   airflow_airflow-triggerer   "/usr/bin/dumb-init …"   30 minutes ago   Up 30 minutes (healthy)   8080/tcp                                              airflow-airflow-triggerer-1
+3243e7d76abd   airflow_airflow-webserver   "/usr/bin/dumb-init …"   30 minutes ago   Up 30 minutes (healthy)   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp             airflow-airflow-webserver-1
+342283c1c100   airflow_flower              "/usr/bin/dumb-init …"   30 minutes ago   Up 30 minutes (healthy)   0.0.0.0:5555->5555/tcp, :::5555->5555/tcp, 8080/tcp   airflow-flower-1
+705af99c80fc   airflow_airflow-scheduler   "/usr/bin/dumb-init …"   30 minutes ago   Up 30 minutes (healthy)   8080/tcp                                              airflow-airflow-scheduler-1
+11d1c0202549   redis:latest                "docker-entrypoint.s…"   30 minutes ago   Up 30 minutes (healthy)   6379/tcp                                              airflow-redis-1
+bedd33c18f96   postgres:13                 "docker-entrypoint.s…"   30 minutes ago   Up 30 minutes (healthy)   5432/tcp                                              airflow-postgres-1
+```
+- Execute the following command to access the airflow-worker container bash (using the id obtained on the previous command)
+```sh
+docker exec -it fbb212ef7755 bash
+```
+- Run `pip install scrapy` to install the missing python package
 
 You may now access the Airflow GUI by browsing to `localhost:8080`. Username and password are both `airflow` .
 >***IMPORTANT***: this is ***NOT*** a production-ready setup! The username and password for Airflow have not been modified in any way; you can find them by searching for `_AIRFLOW_WWW_USER_USERNAME` and `_AIRFLOW_WWW_USER_PASSWORD` inside the `docker-compose.yaml` file.
@@ -331,6 +347,8 @@ If any boardgame present on your wishlist reached a target price below the desir
 ## Data transformation with DBT
 I created a table in BigQuery using DBT to consolidate the data from boardgames and gamesprices tables.
 The [dbt models are presented here](https://github.com/FilipeTheAnalyst/DTC-DE-Project/tree/master/dbt_project/models).
+
+Just need to import the data inside 
 
 ## Data visualization with Google Data Studio
 The dashboards are available [in this link](https://datastudio.google.com/reporting/3f21fa08-66b2-4b85-bcf6-69711ecc73b9)
