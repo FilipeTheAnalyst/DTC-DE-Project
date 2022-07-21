@@ -324,6 +324,10 @@ And the tables boardgames and gamesprices created inside capstone_boardgame_data
 
 After the data ingestion, you may shut down Airflow by pressing `Ctrl+C` on the terminal running Airflow and then running `docker-compose down`, or you may keep Airflow running if you want to update the dataset every day.
 
+### Example of price alert notification via e-mail
+If any boardgame present on your wishlist reached a target price below the desired value, you'll receive an email like this one below.
+![price_alert](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/73fbd110-434c-4bda-8a1f-4e608172922e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220721%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220721T004858Z&X-Amz-Expires=86400&X-Amz-Signature=63cce2277e812698e0d5e9dea45aef4992a362fe1ad3219def2bf27dba59459d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+
 ## Data transformation with DBT
 I created a table in BigQuery using DBT to consolidate the data from boardgames and gamesprices tables.
 The [dbt models are presented here](https://github.com/FilipeTheAnalyst/DTC-DE-Project/tree/master/dbt_project/models).
