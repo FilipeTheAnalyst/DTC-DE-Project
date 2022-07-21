@@ -1,0 +1,55 @@
+version: 2
+
+sources:
+    - name: staging
+      database: taxi-rides-ny-348613
+      schema: capstone_boardgame_data
+
+      tables:
+        - name: boardgames
+        - name: gamesprices
+models:
+    - name: stg_boardgame_data
+      description: >
+        Boardgames records from boardgamegeek website with information about ranking, name, published year, rating, number of voters, description.
+        Each boardgame is uniquely identified by id.
+      columns:
+        - name: id
+          description: Unique identifier for each boardgame
+        - name: rank
+          description: The ranking position for each boardgame (lower number is better)
+        - name: name
+          description: Boardgame name
+        - name: url
+          description: Boardgame url from boardgamegeek website with info details
+        - name: rating
+          description: Average rating given by users to boardgames (score goes from 1 to 10 - the higher the better)
+        - name: num_voters
+          description: Total number of votes (rating) given by users
+        - name: year_published
+          description: The year the boardgame was published
+        - name: description
+          description: Text with a small description of the boardgame
+        - name: date
+          description: The date that the information was pulled from the boardgamegeek website
+    - name: stg_games_prices
+      description: >
+        Boardgames records collected from 7 different stores that are for sale.
+        The records contain information about the store, price and boardgame id to cross the information with the stg_boardgame_data table.
+      columns:
+        - name: id
+          description: Unique identifier for each boardgame
+        - name: store
+          description: Name of the store
+        - name: name
+          description: Boardgame name
+        - name: price
+          description: Boardgame price
+        - name: bgg_url
+          description: Boardgame url from boardgamegeek website with info details
+        - name: store_url
+          description: Boardgame url from store website with info details
+        - name: date
+          description: The date that the information was pulled from the store website
+        - name: stock_availability
+          description: The stock status of the boardgame (In Stock vs Out of Stock)

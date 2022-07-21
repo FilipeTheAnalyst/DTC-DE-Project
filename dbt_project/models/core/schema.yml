@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: fact_boardgames
+    description: >
+      Boardgames records from boardgamegeek website with information about ranking, name, published year, rating, number of voters, description.
+      Each boardgame is uniquely identified by id.
+      The table contains also information about the prices that boardgames are available on stores with the average price and price range data.
