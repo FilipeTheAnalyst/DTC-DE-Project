@@ -356,4 +356,5 @@ Then you just need to run `dbt run` to execute all the dependencies needed to cr
 
 ## Data visualization with Google Data Studio
 The dashboards are available [in this link](https://datastudio.google.com/reporting/3f21fa08-66b2-4b85-bcf6-69711ecc73b9).
+As an alternative I also converted to a pdf file available on this [repo](https://github.com/FilipeTheAnalyst/DTC-DE-Project/blob/master/Boardgames_Analysis.pdf).
 
