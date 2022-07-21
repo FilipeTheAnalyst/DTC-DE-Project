@@ -19,7 +19,7 @@ For my project I decided to analyse the boardgames published till today (around 
 
 **With this project I intend to analyse the boardgame universe, checking the trend of boardgames published with their respetive price ranges and giving the possibility to define a wishlist of boardgames with the target price.**
 
-![Ticket to Ride](https://cf.geekdo-images.com/URHAgY3hKDF6W2-mVlnb9Q__imagepagezoom/img/XjBePAG4q1WbM_BqXCT1dqpRXmA=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic1006275.jpg)
+![Takenoko](https://www.boardgamequest.com/wp-content/uploads/2015/09/Takenoko-Chibis-Header.jpg)
 
 ## Dataset
 
@@ -355,4 +355,5 @@ Then you just need to run `dbt run` to execute all the dependencies needed to cr
 ![dbt_lineage](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0d0f55de-f6eb-4cb5-9ceb-da934fef0057/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220721%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220721T113607Z&X-Amz-Expires=86400&X-Amz-Signature=8fee395a37b490efce166be37d534be8fe63f23645ef093ed0d4ec74da9be0e3&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 ## Data visualization with Google Data Studio
-The dashboards are available [in this link](https://datastudio.google.com/reporting/3f21fa08-66b2-4b85-bcf6-69711ecc73b9)
+The dashboards are available [in this link](https://datastudio.google.com/reporting/3f21fa08-66b2-4b85-bcf6-69711ecc73b9).
+
